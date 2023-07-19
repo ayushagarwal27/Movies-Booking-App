@@ -27,7 +27,7 @@ const TabNavigator = () => {
         name="Home"
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <View
               style={[
                 styles.activeTabBackground,
@@ -47,7 +47,7 @@ const TabNavigator = () => {
         name="Search"
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <View
               style={[
                 styles.activeTabBackground,
@@ -67,7 +67,7 @@ const TabNavigator = () => {
         name="Ticket"
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({focused, color, size}) => (
+          tabBarIcon: ({focused}) => (
             <View
               style={[
                 styles.activeTabBackground,
