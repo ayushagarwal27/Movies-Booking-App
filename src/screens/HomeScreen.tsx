@@ -9,17 +9,18 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import {COLORS} from '../theme/theme';
+import {COLORS, SPACING} from '../theme/theme';
 import {
   upcomingMovies,
   nowPlayingMovies,
   popularMovies,
   baseImagePath,
 } from '../api/apiCalls';
+import InputHeader from '../components/InputHeader';
 
 const {width, height} = Dimensions.get('window');
 
-const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC = ({navigation}: any) => {
   const [nowPlayingMoviesList, setNowPlayingMoviesList] = useState<
     any | undefined
   >(undefined);
@@ -29,6 +30,10 @@ const HomeScreen: React.FC = () => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState<any | undefined>(
     undefined,
   );
+
+  const handleSearch = () => {
+    navigation.navigate('Search');
+  };
 
   if (
     nowPlayingMoviesList === undefined &&
@@ -41,7 +46,9 @@ const HomeScreen: React.FC = () => {
         bounces={false}
         contentContainerStyle={styles.scrollViewContainer}>
         <StatusBar hidden />
-        <View style={styles.inputHeaderContainer}></View>
+        <View style={styles.inputHeaderContainer}>
+          <InputHeader onSearch={handleSearch} />
+        </View>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={COLORS.Orange} />
         </View>
@@ -49,7 +56,17 @@ const HomeScreen: React.FC = () => {
     );
   }
 
-  return <View style={styles.container}></View>;
+  return (
+    <ScrollView
+      style={styles.container}
+      bounces={false}
+      contentContainerStyle={styles.scrollViewContainer}>
+      <StatusBar hidden />
+      <View style={styles.inputHeaderContainer}>
+        <InputHeader onSearch={handleSearch} />
+      </View>
+    </ScrollView>
+  );
 };
 
 export default HomeScreen;
@@ -57,7 +74,10 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {backgroundColor: COLORS.Black},
   scrollViewContainer: {flex: 1},
-  inputHeaderContainer: {},
+  inputHeaderContainer: {
+    marginHorizontal: SPACING.space_36,
+    marginTop: SPACING.space_28,
+  },
   loadingContainer: {
     flex: 1,
     alignItems: 'center',

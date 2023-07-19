@@ -20,7 +20,7 @@ const App: FC<AppProps> = () => {
         />
         <Stack.Screen
           component={MoviesDetailScreen}
-          name="Movies Detail"
+          name="Movie Detail"
           options={{animation: 'slide_from_right'}}
         />
         <Stack.Screen
