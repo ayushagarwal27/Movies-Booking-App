@@ -94,6 +94,7 @@ const HomeScreen: React.FC = ({navigation}: any) => {
       <CategoryTitle title="Now Playing" />
       <MoviesList
         list={nowPlayingMoviesList}
+        type="main"
         width={width}
         onItemPress={item =>
           navigation.navigate('Movie Detail', {movieId: item.id})
@@ -103,6 +104,7 @@ const HomeScreen: React.FC = ({navigation}: any) => {
       <MoviesList
         list={popularMoviesList}
         width={width}
+        type="sub"
         onItemPress={item =>
           navigation.navigate('Movie Detail', {movieId: item.id})
         }
@@ -111,6 +113,7 @@ const HomeScreen: React.FC = ({navigation}: any) => {
       <MoviesList
         list={upcomingMoviesList}
         width={width}
+        type="sub"
         onItemPress={item =>
           navigation.navigate('Movie Detail', {movieId: item.id})
         }
