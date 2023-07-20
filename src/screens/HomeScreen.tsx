@@ -1,24 +1,47 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  Text,
   View,
   StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
   Dimensions,
   ScrollView,
   StatusBar,
 } from 'react-native';
 import {COLORS, SPACING} from '../theme/theme';
-import {
-  upcomingMovies,
-  nowPlayingMovies,
-  popularMovies,
-  baseImagePath,
-} from '../api/apiCalls';
+import {upcomingMovies, nowPlayingMovies, popularMovies} from '../api/apiCalls';
 import InputHeader from '../components/InputHeader';
+import CategoryTitle from '../components/CategoryTitle';
+import MoviesList from '../components/MoviesList';
 
 const {width, height} = Dimensions.get('window');
+
+const getNowPlayingMovies = async () => {
+  try {
+    let res = await fetch(nowPlayingMovies);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log('Something went wrong in getNowPlayingMovies', err);
+  }
+};
+const getUpcomingMovies = async () => {
+  try {
+    let res = await fetch(upcomingMovies);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log('Something went wrong in getUpcomingMovies', err);
+  }
+};
+const getPopularMovies = async () => {
+  try {
+    let res = await fetch(popularMovies);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log('Something went wrong in getPopularMovies', err);
+  }
+};
 
 const HomeScreen: React.FC = ({navigation}: any) => {
   const [nowPlayingMoviesList, setNowPlayingMoviesList] = useState<
@@ -30,6 +53,12 @@ const HomeScreen: React.FC = ({navigation}: any) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState<any | undefined>(
     undefined,
   );
+
+  useEffect(() => {
+    getNowPlayingMovies().then(data => setNowPlayingMoviesList(data.results));
+    getUpcomingMovies().then(data => setUpcomingMoviesList(data.results));
+    getPopularMovies().then(data => setPopularMoviesList(data.results));
+  }, []);
 
   const handleSearch = () => {
     navigation.navigate('Search');
@@ -43,8 +72,8 @@ const HomeScreen: React.FC = ({navigation}: any) => {
     return (
       <ScrollView
         style={styles.container}
-        bounces={false}
-        contentContainerStyle={styles.scrollViewContainer}>
+        // bounces={false}
+      >
         <StatusBar hidden />
         <View style={styles.inputHeaderContainer}>
           <InputHeader onSearch={handleSearch} />
@@ -57,14 +86,35 @@ const HomeScreen: React.FC = ({navigation}: any) => {
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      bounces={false}
-      contentContainerStyle={styles.scrollViewContainer}>
+    <ScrollView style={styles.container} bounces={false}>
       <StatusBar hidden />
       <View style={styles.inputHeaderContainer}>
         <InputHeader onSearch={handleSearch} />
       </View>
+      <CategoryTitle title="Now Playing" />
+      <MoviesList
+        list={nowPlayingMoviesList}
+        width={width}
+        onItemPress={item =>
+          navigation.navigate('Movie Detail', {movieId: item.id})
+        }
+      />
+      <CategoryTitle title="Popular" />
+      <MoviesList
+        list={popularMoviesList}
+        width={width}
+        onItemPress={item =>
+          navigation.navigate('Movie Detail', {movieId: item.id})
+        }
+      />
+      <CategoryTitle title="Upcoming" />
+      <MoviesList
+        list={upcomingMoviesList}
+        width={width}
+        onItemPress={item =>
+          navigation.navigate('Movie Detail', {movieId: item.id})
+        }
+      />
     </ScrollView>
   );
 };
@@ -73,7 +123,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {backgroundColor: COLORS.Black},
-  scrollViewContainer: {flex: 1},
+  // scrollViewContainer: {flex: 1},
   inputHeaderContainer: {
     marginHorizontal: SPACING.space_36,
     marginTop: SPACING.space_28,
