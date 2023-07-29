@@ -15,8 +15,8 @@ interface SubMovieCardProps {
   shouldAddMarginAround?: boolean;
   onCardPress: () => void;
   cardWidth: number;
-  isFirst: boolean;
-  isLast: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 const SubMovieCard: FC<SubMovieCardProps> = props => {

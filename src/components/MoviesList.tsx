@@ -10,6 +10,8 @@ interface MoviesListProps {
   onItemPress: (item: any) => void;
   width: number;
   type: 'main' | 'sub';
+  numberOfCol?: number;
+  listHeaderComponent?: any;
 }
 
 const MoviesList: FC<MoviesListProps> = props => {
@@ -20,9 +22,14 @@ const MoviesList: FC<MoviesListProps> = props => {
           <SubMovieCard
             title={item.original_title}
             imagePath={baseImagePath('w342', item.poster_path)}
-            shouldAddMarginAtEnd={true}
+            shouldAddMarginAtEnd={props.listHeaderComponent ? false : true}
+            shouldAddMarginAround={props.listHeaderComponent ? true : false}
             onCardPress={() => props.onItemPress(item)}
-            cardWidth={props.width / 3}
+            cardWidth={
+              props.listHeaderComponent
+                ? props.width / 2 - SPACING.space_10 * 2
+                : props.width / 3
+            }
             isFirst={index === 0}
             isLast={index === props.list.length - 1}
           />
@@ -50,15 +57,24 @@ const MoviesList: FC<MoviesListProps> = props => {
 
   return (
     <FlatList
-      horizontal
+      horizontal={props.numberOfCol ? false : true}
       data={props.list}
       bounces={false}
       snapToInterval={
         props.type === 'main' ? props.width * 0.7 + SPACING.space_36 : undefined
       }
+      decelerationRate={0}
       keyExtractor={item => item.id}
-      contentContainerStyle={styles.containerGap36}
+      contentContainerStyle={
+        props.listHeaderComponent
+          ? styles.centerContainer
+          : styles.containerGap36
+      }
       renderItem={({item, index}) => card(item, index)}
+      numColumns={props.numberOfCol ? props.numberOfCol : 1}
+      ListHeaderComponent={
+        props.listHeaderComponent ? props.listHeaderComponent : null
+      }
     />
   );
 };
@@ -68,5 +84,8 @@ export default MoviesList;
 const styles = StyleSheet.create({
   containerGap36: {
     gap: SPACING.space_36,
+  },
+  centerContainer: {
+    alignItems: 'center',
   },
 });

@@ -13,7 +13,7 @@ import InputHeader from '../components/InputHeader';
 import CategoryTitle from '../components/CategoryTitle';
 import MoviesList from '../components/MoviesList';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const getNowPlayingMovies = async () => {
   try {
