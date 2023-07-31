@@ -58,6 +58,8 @@ const MoviesList: FC<MoviesListProps> = props => {
   return (
     <FlatList
       horizontal={props.numberOfCol ? false : true}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
       data={props.list}
       bounces={false}
       snapToInterval={

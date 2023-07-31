@@ -72,6 +72,7 @@ const HomeScreen: React.FC = ({navigation}: any) => {
     return (
       <ScrollView
         style={styles.container}
+        showsVerticalScrollIndicator={false}
         // bounces={false}
       >
         <StatusBar hidden />
@@ -86,7 +87,10 @@ const HomeScreen: React.FC = ({navigation}: any) => {
   }
 
   return (
-    <ScrollView style={styles.container} bounces={false}>
+    <ScrollView
+      style={styles.container}
+      bounces={false}
+      showsVerticalScrollIndicator={false}>
       <StatusBar hidden />
       <View style={styles.inputHeaderContainer}>
         <InputHeader onSearch={handleSearch} />

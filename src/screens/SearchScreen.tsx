@@ -18,7 +18,7 @@ const SearchScreen: FC<SearchScreenProps> = ({navigation}: any) => {
       const json = await res.json();
       setSearchList(json.results);
     } catch (error) {
-      console.error('Something went wrong in searchMoviesListfn');
+      console.error('Something went wrong in searchMoviesListfn', error);
     }
   };
 
