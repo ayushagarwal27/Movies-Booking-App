@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
-import {movieCastDetails, movieDetails} from '../api/apiCalls';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  StatusBar,
+  ImageBackground,
+} from 'react-native';
+import {baseImagePath, movieCastDetails, movieDetails} from '../api/apiCalls';
 import {COLORS, SPACING} from '../theme/theme';
 import AppHeader from '../components/AppHeader';
+import LinearGradient from 'react-native-linear-gradient';
 
 const getMovieDetails = async (movieId: number) => {
   try {
@@ -64,12 +72,25 @@ const MoviesDetailScreen: React.FC = ({navigation, route}: any) => {
       style={styles.container}
       bounces={false}
       showsVerticalScrollIndicator={false}>
-      <View style={styles.appHeaderContainer}>
-        <AppHeader
-          name="close"
-          header={''}
-          onPress={() => navigation.goBack()}
-        />
+      <StatusBar hidden />
+      <View>
+        <ImageBackground
+          source={{
+            uri: baseImagePath('w780', movieData?.backdrop_path),
+          }}
+          style={styles.imageBG}>
+          <LinearGradient
+            colors={[COLORS.BlackRGB10, COLORS.Black]}
+            style={styles.linearGradient}>
+            <View style={styles.appHeaderContainer}>
+              <AppHeader
+                name="close"
+                header={'Movie Details'}
+                onPress={() => navigation.goBack()}
+              />
+            </View>
+          </LinearGradient>
+        </ImageBackground>
       </View>
     </ScrollView>
   );
@@ -91,4 +112,9 @@ const styles = StyleSheet.create({
   contentContainerStyles: {
     flex: 1,
   },
+  imageBG: {
+    width: '100%',
+    aspectRatio: 3072 / 1727,
+  },
+  linearGradient: {height: '100%'},
 });
