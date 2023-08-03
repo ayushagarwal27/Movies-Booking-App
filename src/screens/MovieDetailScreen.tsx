@@ -8,6 +8,8 @@ import {
   ImageBackground,
   Image,
   Text,
+  FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import {baseImagePath, movieCastDetails, movieDetails} from '../api/apiCalls';
 import {
@@ -20,6 +22,8 @@ import {
 import AppHeader from '../components/AppHeader';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomIcon from '../components/CustomIcon';
+import CategoryTitle from '../components/CategoryTitle';
+import CastCard from '../components/CastCard';
 
 const getMovieDetails = async (movieId: number) => {
   try {
@@ -51,7 +55,7 @@ const MoviesDetailScreen: React.FC = ({navigation, route}: any) => {
       const tempMoviesData = await getMovieDetails(movieId);
       setMovieData(tempMoviesData);
       const tempCastsData = await getMovieCastDetails(movieId);
-      setMovieCastData(tempCastsData);
+      setMovieCastData(tempCastsData.cast);
     })();
   }, [route.params]);
 
@@ -142,6 +146,38 @@ const MoviesDetailScreen: React.FC = ({navigation, route}: any) => {
           </Text>
         </View>
         <Text style={styles.overview}>{movieData?.overview}</Text>
+      </View>
+      <View>
+        <CategoryTitle title="Top Cast" />
+        <FlatList
+          data={movieCastData}
+          keyExtractor={item => item.id}
+          horizontal
+          contentContainerStyle={styles.containerGap24}
+          renderItem={({item, index}) => (
+            <CastCard
+              shouldMarginatedAtEnd={true}
+              cardWidth={80}
+              isFirst={index === 0}
+              isLast={index === movieCastData?.length - 1}
+              imagePath={baseImagePath('w185', item.profile_path)}
+              title={item.original_name}
+              subtitle={item.character}
+            />
+          )}
+        />
+        <View>
+          <TouchableOpacity
+            style={styles.buttonBackground}
+            onPress={() =>
+              navigation.push('Seat Booking', {
+                bgImg: baseImagePath('w780', movieData.backdrop_path),
+                posterImg: baseImagePath('original', movieData.poster_path),
+              })
+            }>
+            <Text style={styles.buttonText}>Select Seats</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -240,6 +276,25 @@ const styles = StyleSheet.create({
   },
   overview: {
     fontFamily: FONTFAMILY.poppins_light,
+    fontSize: FONTSIZE.size_14,
+    color: COLORS.White,
+  },
+  containerGap24: {
+    gap: SPACING.space_24,
+  },
+  buttonBackground: {
+    alignItems: 'center',
+    marginVertical: SPACING.space_24,
+    borderRadius: BORDERRADIUS.radius_25 * 2,
+    overflow: 'hidden',
+  },
+  buttonText: {
+    borderRadius: BORDERRADIUS.radius_20,
+    overflow: 'hidden',
+    paddingHorizontal: SPACING.space_24,
+    paddingVertical: SPACING.space_10,
+    backgroundColor: COLORS.Orange,
+    fontFamily: FONTFAMILY.poppins_medium,
     fontSize: FONTSIZE.size_14,
     color: COLORS.White,
   },
